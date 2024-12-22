@@ -10,6 +10,7 @@ namespace MusicLibrary.Data
         }
         public DbSet<Song> Songs { get; set; }
         public DbSet<Genre> Genres { get; set; }
+        public DbSet<Artist> Artists { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -18,6 +19,15 @@ namespace MusicLibrary.Data
                new Genre { Id = 2, Name = "Grunge" },
                new Genre { Id = 3, Name = "Metal" }
                );
+
+            builder.Entity<Artist>().HasData(
+                new Artist { Id = 1, Name = "Queen" },
+                new Artist { Id = 2, Name = "Led Zeppelin" },
+                new Artist { Id = 3, Name = "Eagles" },
+                new Artist { Id = 4, Name = "John Lennon" },
+                new Artist { Id = 5, Name = "Nirvana" },
+                new Artist { Id = 6, Name = "Metallica" }
+                );
 
             builder.Entity<Song>().HasData(
                 new Song { Id = 1, Title = "Bohemian Rhapsody", ArtistName = "Queen", GenreId = 1, ReleaseDate = new System.DateTime(1975, 10, 31) },

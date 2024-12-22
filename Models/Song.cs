@@ -17,5 +17,8 @@ namespace MusicLibrary.Models
 
         [Required(ErrorMessage = "Please enter a genre")]
         public int GenreId { get; set; }
+
+        [Required(ErrorMessage = "Please enter an artist")]
+        public int ArtistId { get; set; }
     }
 }
