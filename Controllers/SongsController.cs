@@ -60,16 +60,16 @@ namespace MusicLibrary.Controllers
         }
 
         // GET: Songs/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            //ViewBag.Genres = _context.Genres.ToList();
+            ViewBag.Genres = await _genreRepo.GetAll();
             return View();
         }
 
         // POST: Songs/Create       
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,ArtistName,Genre,ReleaseDate")] Song song)
+        public async Task<IActionResult> Create([FromForm] Song song)
         {
             if (ModelState.IsValid)
             {
@@ -88,14 +88,17 @@ namespace MusicLibrary.Controllers
             }
 
             var song = await _songRepo.Get(id);
-            if (song == null)
+
+            var songEditDTO = _mapper.Map<SongEditDTO>(song);
+
+            if (songEditDTO == null)
             {
                 return NotFound();
             }
 
-            //ViewBag.Genres = _context.Genres.ToList();
+            ViewBag.Genres = await _genreRepo.GetAll();
 
-            return View(song);
+            return View(songEditDTO);
         }
 
         // POST: Songs/Edit/5

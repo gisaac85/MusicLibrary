@@ -8,8 +8,8 @@ namespace MusicLibrary.Data
     {
         public MappingProfile()
         {
-            CreateMap<SongDTO, Song>();
-            CreateMap<Song, SongDTO>();
+            CreateMap<Song, SongDTO>().ReverseMap();
+            CreateMap<Song, SongEditDTO>().ReverseMap();
         }
     }
 }

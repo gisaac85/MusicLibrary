@@ -1,4 +1,4 @@
-﻿@model MusicLibrary.Models.Song
+﻿@model MusicLibrary.Data.DTO.SongEditDTO
 
 @{
     ViewData["Title"] = "Edit";
@@ -25,8 +25,7 @@
                 <span asp-validation-for="ArtistName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="GenreId" class="control-label"></label>   
-               
+                <label asp-for="GenreId" class="control-label"></label>               
                 <select asp-for="GenreId" class="form-control">
 					<option value="">-- Select Genre --</option>
                     @{
