@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MusicLibrary.Data.DTO;
 using MusicLibrary.Data.RepoInterface;
 using MusicLibrary.Models;
 
@@ -8,17 +10,31 @@ namespace MusicLibrary.Controllers
     public class SongsController : Controller
     {
         private readonly ISongRepo _songRepo;
+        private readonly IGenreRepo _genreRepo;
+        private readonly IMapper _mapper;
 
-        public SongsController(ISongRepo songRepo)
+        public SongsController(ISongRepo songRepo,  IMapper mapper, IGenreRepo genreRepo)
         {
             _songRepo = songRepo;
+            _mapper = mapper;
+            _genreRepo = genreRepo;
         }
 
         // GET: Songs
         public async Task<IActionResult> Index()
         {
-            var songList = await _songRepo.GetAll();
-            return View(songList);
+            var songList = await _songRepo.GetAll();           
+
+            var songListDTO = _mapper.Map<List<Song>,List<SongDTO>>(songList);
+
+            var genreList = await _genreRepo.GetAll();
+            
+            foreach (var song in songListDTO)
+            {
+                song.Genre = genreList.FirstOrDefault(g => g.Id == song.GenreId);
+            }
+
+            return View(songListDTO);
         }
 
         // GET: Songs/Details/5
@@ -36,9 +52,11 @@ namespace MusicLibrary.Controllers
                 return NotFound();
             }
 
-            //ViewBag.Genres = _context.Genres.ToList();
+            var songDTO = _mapper.Map<Song, SongDTO>(song);
 
-            return View(song);
+            songDTO.Genre = await _genreRepo.Get(songDTO.GenreId);
+
+            return View(songDTO);
         }
 
         // GET: Songs/Create

@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using MusicLibrary.Data;
 using MusicLibrary.Data.Repo;
@@ -5,14 +6,23 @@ using MusicLibrary.Data.RepoInterface;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Auto Mapper Configurations
+builder.Services.AddAutoMapper(cfg => 
+cfg.AddProfile<MappingProfile>());
+
+builder.Services.AddAutoMapper(cfg => cfg.AllowNullCollections = true);
+
+builder.Services.AddAutoMapper(cfg => cfg.AddGlobalIgnore("Item"));
+
 builder.Services.AddDbContext<MusicLibraryDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// inject the ISongRepo interface and the SongRepo class
-builder.Services.AddScoped<ISongRepo, SongRepo>(); 
+// inject repos
+builder.Services.AddScoped<ISongRepo, SongRepo>();
+builder.Services.AddScoped<IGenreRepo, GenreRepo>();
 
 var app = builder.Build();
 
