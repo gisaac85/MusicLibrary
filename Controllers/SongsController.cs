@@ -6,29 +6,25 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MusicLibrary.Data;
+using MusicLibrary.Data.RepoInterface;
 using MusicLibrary.Models;
 
 namespace MusicLibrary.Controllers
 {
     public class SongsController : Controller
     {
-        private readonly MusicLibraryDbContext _context;
+        private readonly ISongRepo _songRepo;
 
-        public SongsController(MusicLibraryDbContext context)
+        public SongsController(ISongRepo songRepo)
         {
-            _context = context;
+            _songRepo = songRepo;
         }
 
         // GET: Songs
         public async Task<IActionResult> Index()
         {
-            var modelList = await _context.Songs.ToListAsync();
-            //var genres = _context.Genres.ToList();
-            //foreach (var song in modelList)
-            //{
-            //    song.Genre = genres.FirstOrDefault(g => g.Id == song.GenreId);
-            //}
-            return View(modelList);
+            var songList = await _songRepo.GetAll();
+            return View(songList);
         }
 
         // GET: Songs/Details/5
@@ -39,14 +35,14 @@ namespace MusicLibrary.Controllers
                 return NotFound();
             }
 
-            var song = await _context.Songs
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var song = await _songRepo.Details(id);
+
             if (song == null)
             {
                 return NotFound();
             }
 
-            ViewBag.Genres = _context.Genres.ToList();
+            //ViewBag.Genres = _context.Genres.ToList();
 
             return View(song);
         }
@@ -54,7 +50,7 @@ namespace MusicLibrary.Controllers
         // GET: Songs/Create
         public IActionResult Create()
         {
-            ViewBag.Genres = _context.Genres.ToList();
+            //ViewBag.Genres = _context.Genres.ToList();
             return View();
         }
 
@@ -65,8 +61,7 @@ namespace MusicLibrary.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(song);
-                await _context.SaveChangesAsync();
+                await _songRepo.Create(song);
                 return RedirectToAction(nameof(Index));
             }
             return View(song);
@@ -80,13 +75,13 @@ namespace MusicLibrary.Controllers
                 return NotFound();
             }
 
-            var song = await _context.Songs.FindAsync(id);
+            var song = await _songRepo.Get(id);
             if (song == null)
             {
                 return NotFound();
             }
 
-            ViewBag.Genres = _context.Genres.ToList();
+            //ViewBag.Genres = _context.Genres.ToList();
 
             return View(song);
         }
@@ -105,12 +100,11 @@ namespace MusicLibrary.Controllers
             {
                 try
                 {
-                    _context.Update(song);
-                    await _context.SaveChangesAsync();
+                   _songRepo.Edit(song);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!SongExists(song.Id))
+                    if (!_songRepo.SongExists(song.Id))
                     {
                         return NotFound();
                     }
@@ -132,8 +126,7 @@ namespace MusicLibrary.Controllers
                 return NotFound();
             }
 
-            var song = await _context.Songs
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var song = await _songRepo.Get(id);
             if (song == null)
             {
                 return NotFound();
@@ -147,19 +140,9 @@ namespace MusicLibrary.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var song = await _context.Songs.FindAsync(id);
-            if (song != null)
-            {
-                _context.Songs.Remove(song);
-            }
-
-            await _context.SaveChangesAsync();
+            var song = await _songRepo.Get(id);
+            await _songRepo.Delete(song);
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool SongExists(int id)
-        {
-            return _context.Songs.Any(e => e.Id == id);
         }
     }
 }
