@@ -9,9 +9,6 @@ namespace MusicLibrary.Models
         [Required(ErrorMessage = "Please enter a title")]
         public string? Title { get; set; }
 
-        [Required(ErrorMessage = "Please enter an artist name")]
-        public string? ArtistName { get; set; }     
-
         [Required(ErrorMessage = "Please enter a release date")]
         public DateTime ReleaseDate { get; set; }
 

@@ -10,6 +10,7 @@ namespace MusicLibrary.Data
         {
             CreateMap<Song, SongDTO>().ReverseMap();
             CreateMap<Song, SongEditDTO>().ReverseMap();
+            CreateMap<Song, SongDeleteDTO>().ReverseMap();
         }
     }
 }

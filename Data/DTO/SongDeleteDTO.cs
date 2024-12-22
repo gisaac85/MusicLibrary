@@ -2,7 +2,7 @@
 
 namespace MusicLibrary.Data.DTO
 {
-    public class SongDTO
+    public class SongDeleteDTO
     {
         public int Id { get; set; }
 

@@ -23,6 +23,7 @@ builder.Services.AddControllersWithViews();
 // inject repos
 builder.Services.AddScoped<ISongRepo, SongRepo>();
 builder.Services.AddScoped<IGenreRepo, GenreRepo>();
+builder.Services.AddScoped<IArtistRepo, ArtistRepo>();
 
 var app = builder.Build();
 

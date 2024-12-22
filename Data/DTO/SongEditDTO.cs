@@ -8,12 +8,14 @@ namespace MusicLibrary.Data.DTO
 
         public string? Title { get; set; }
 
-        public string? ArtistName { get; set; }
-
         public DateTime ReleaseDate { get; set; }
 
         public int GenreId { get; set; }
 
+        public int ArtistId { get; set; }
+
         public Genre Genre { get; set; }
+
+        public Artist Artist { get; set; }
     }
 }
