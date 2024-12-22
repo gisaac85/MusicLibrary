@@ -22,7 +22,13 @@ namespace MusicLibrary.Controllers
         // GET: Songs
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Songs.ToListAsync());
+            var modelList = await _context.Songs.ToListAsync();
+            //var genres = _context.Genres.ToList();
+            //foreach (var song in modelList)
+            //{
+            //    song.Genre = genres.FirstOrDefault(g => g.Id == song.GenreId);
+            //}
+            return View(modelList);
         }
 
         // GET: Songs/Details/5
@@ -40,18 +46,19 @@ namespace MusicLibrary.Controllers
                 return NotFound();
             }
 
+            ViewBag.Genres = _context.Genres.ToList();
+
             return View(song);
         }
 
         // GET: Songs/Create
         public IActionResult Create()
         {
+            ViewBag.Genres = _context.Genres.ToList();
             return View();
         }
 
-        // POST: Songs/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Songs/Create       
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title,ArtistName,Genre,ReleaseDate")] Song song)
@@ -78,20 +85,21 @@ namespace MusicLibrary.Controllers
             {
                 return NotFound();
             }
+
+            ViewBag.Genres = _context.Genres.ToList();
+
             return View(song);
         }
 
         // POST: Songs/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ArtistName,Genre,ReleaseDate")] Song song)
+        public async Task<IActionResult> Edit(int id,[FromForm] Song song)
         {
             if (id != song.Id)
             {
                 return NotFound();
-            }
+            }          
 
             if (ModelState.IsValid)
             {

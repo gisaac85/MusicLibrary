@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.Serialization;
 
 namespace MusicLibrary.Models
 {
@@ -10,12 +13,12 @@ namespace MusicLibrary.Models
         public string? Title { get; set; }
 
         [Required(ErrorMessage = "Please enter an artist name")]
-        public string? ArtistName { get; set; }
-
-        [Required(ErrorMessage = "Please enter a genre")]
-        public string? Genre { get; set; }
+        public string? ArtistName { get; set; }     
 
         [Required(ErrorMessage = "Please enter a release date")]
         public DateTime ReleaseDate { get; set; }
+
+        [Required(ErrorMessage = "Please enter a genre")]
+        public int GenreId { get; set; }
     }
 }

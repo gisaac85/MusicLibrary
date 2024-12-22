@@ -12,8 +12,8 @@ using MusicLibrary.Data;
 namespace MusicLibrary.Migrations
 {
     [DbContext(typeof(MusicLibraryDbContext))]
-    [Migration("20241222113030_Initialize")]
-    partial class Initialize
+    [Migration("20241222153447_add-all")]
+    partial class addall
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,40 @@ namespace MusicLibrary.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("MusicLibrary.Models.Genre", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Genres");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Rock"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Grunge"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Metal"
+                        });
+                });
 
             modelBuilder.Entity("MusicLibrary.Models.Song", b =>
                 {
@@ -37,9 +71,8 @@ namespace MusicLibrary.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Genre")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("GenreId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("ReleaseDate")
                         .HasColumnType("datetime2");
@@ -50,6 +83,8 @@ namespace MusicLibrary.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("GenreId");
+
                     b.ToTable("Songs");
 
                     b.HasData(
@@ -57,7 +92,7 @@ namespace MusicLibrary.Migrations
                         {
                             Id = 1,
                             ArtistName = "Queen",
-                            Genre = "Rock",
+                            GenreId = 1,
                             ReleaseDate = new DateTime(1975, 10, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Title = "Bohemian Rhapsody"
                         },
@@ -65,7 +100,7 @@ namespace MusicLibrary.Migrations
                         {
                             Id = 2,
                             ArtistName = "Led Zeppelin",
-                            Genre = "Rock",
+                            GenreId = 1,
                             ReleaseDate = new DateTime(1971, 11, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Title = "Stairway to Heaven"
                         },
@@ -73,7 +108,7 @@ namespace MusicLibrary.Migrations
                         {
                             Id = 3,
                             ArtistName = "Eagles",
-                            Genre = "Rock",
+                            GenreId = 1,
                             ReleaseDate = new DateTime(1977, 12, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Title = "Hotel California"
                         },
@@ -81,7 +116,7 @@ namespace MusicLibrary.Migrations
                         {
                             Id = 4,
                             ArtistName = "John Lennon",
-                            Genre = "Rock",
+                            GenreId = 1,
                             ReleaseDate = new DateTime(1971, 10, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Title = "Imagine"
                         },
@@ -89,7 +124,7 @@ namespace MusicLibrary.Migrations
                         {
                             Id = 5,
                             ArtistName = "Nirvana",
-                            Genre = "Grunge",
+                            GenreId = 2,
                             ReleaseDate = new DateTime(1991, 9, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Title = "Smells Like Teen Spirit"
                         },
@@ -97,10 +132,21 @@ namespace MusicLibrary.Migrations
                         {
                             Id = 6,
                             ArtistName = "Metallica",
-                            Genre = "Metal",
+                            GenreId = 3,
                             ReleaseDate = new DateTime(1989, 8, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Title = "One"
                         });
+                });
+
+            modelBuilder.Entity("MusicLibrary.Models.Song", b =>
+                {
+                    b.HasOne("MusicLibrary.Models.Genre", "Genre")
+                        .WithMany()
+                        .HasForeignKey("GenreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Genre");
                 });
 #pragma warning restore 612, 618
         }

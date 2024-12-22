@@ -19,7 +19,7 @@ namespace MusicLibrary.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var songList = await _context.Songs.ToListAsync();
+            var songList = await _context.Songs.Include(g=>g.GenreId).ToListAsync();
             return View(songList);
         }
 
