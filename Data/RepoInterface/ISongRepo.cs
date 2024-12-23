@@ -13,5 +13,7 @@ namespace MusicLibrary.Data.RepoInterface
         public Task<Song> Get(int? id);
 
         public bool SongExists(int id);
+
+        public Task<List<Song>> GetSongByArtistId(int artistId);
     }
 }

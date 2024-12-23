@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MusicLibrary.Data.DTO.SongDTO>
+﻿@model List<MusicLibrary.Data.DTO.SongDTO>
 
 @{
 	ViewData["Title"] = "Index";
@@ -7,6 +7,16 @@
 
 <h1>Index</h1>
 
+<form asp-action="Search" method="get">
+	<div class="form-actions no-color">
+		<p>
+			<label>Find by name: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" /></label>
+			<input type="submit" value="Search" class="btn btn-default" /> |
+			<a asp-action="Index">Back to Full List</a>
+		</p>
+	</div>
+</form>
+
 <p>
 	<a asp-action="Create">Create New</a>
 </p>
@@ -14,10 +24,10 @@
 	<thead>
 		<tr>
 			<th>
-				<a asp-action="Sort" asp-route-sortOrder="@ViewData["TitleSortParm"]">@Html.DisplayNameFor(model => model.Title)</a>
+				<a asp-action="Sort" asp-route-sortOrder="@ViewData["TitleSortParm"]">@Html.DisplayName("Title")</a>
 			</th>
 			<th>
-				<a asp-action="Sort" asp-route-sortOrder="@ViewData["DateSortParm"]">@Html.DisplayNameFor(model => model.ReleaseDate)</a>
+				<a asp-action="Sort" asp-route-sortOrder="@ViewData["DateSortParm"]">@Html.DisplayName("ReleaseDate")</a>
 			</th>
 			<th>
 				<a asp-action="Sort" asp-route-sortOrder="@ViewData["ArtistSortParm"]">@Html.DisplayName("Artist")</a>

@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using MusicLibrary.Data.DTO;
 using MusicLibrary.Data.RepoInterface;
 using MusicLibrary.Models;
+using System.Collections.Immutable;
 
 namespace MusicLibrary.Controllers
 {
@@ -90,6 +92,37 @@ namespace MusicLibrary.Controllers
                     break;
             }
             return View("Index",songListDTO);
+        }
+
+        public async Task<IActionResult> Search(string searchString)
+        {                 
+            ViewData["CurrentFilter"] = searchString;
+
+            var artists = from s in await _artistRepo.GetAll() select s;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                artists = artists.Where(s => s.Name.Contains(searchString) ||
+                                        s.Name.ToLower().Contains(searchString) ||
+                                        s.Name.ToLower().StartsWith(searchString));
+            }
+
+            var songs = new List<Song>();
+
+            foreach (var artist in artists)
+            {
+                songs = await _songRepo.GetSongByArtistId(artist.Id);
+            }
+
+            var songListDTO = _mapper.Map<List<Song>, List<SongDTO>>(songs);
+
+            foreach (var song in songListDTO)
+            {
+                song.Genre =  await _genreRepo.Get(song.GenreId);
+                song.Artist = await _artistRepo.Get(song.ArtistId);
+            }
+
+            return View("Index", songListDTO);
         }
 
         // GET: Songs/Details/5

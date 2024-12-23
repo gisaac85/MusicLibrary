@@ -51,6 +51,11 @@ namespace MusicLibrary.Data.Repo
             return await _dbContext.Songs.ToListAsync();            
         }
 
+        public async Task<List<Song>> GetSongByArtistId(int artistId)
+        {
+            return await _dbContext.Songs.Where(s => s.ArtistId == artistId).ToListAsync();
+        }
+
         public bool SongExists(int id)
         {
             return  _dbContext.Songs.Any(e => e.Id == id);
