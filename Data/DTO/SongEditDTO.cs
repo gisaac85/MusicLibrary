@@ -8,7 +8,7 @@ namespace MusicLibrary.Data.DTO
 
         public string? Title { get; set; }
 
-        public DateTime ReleaseDate { get; set; }
+        public DateOnly ReleaseDate { get; set; }
 
         public int GenreId { get; set; }
 

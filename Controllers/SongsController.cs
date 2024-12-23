@@ -42,6 +42,56 @@ namespace MusicLibrary.Controllers
             return View(songListDTO);
         }
 
+        public async Task<IActionResult> Sort(string sortOrder)
+        {
+            ViewData["TitleSortParm"] = sortOrder == "Title" ? "title_desc" : "Title";
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+            ViewData["GenreSortParm"] = sortOrder == "Genre" ? "genre_desc" : "Genre";
+            ViewData["ArtistSortParm"] = sortOrder == "Artist" ? "artist_desc" : "Artist";
+            
+            var songList = await _songRepo.GetAll();
+            var songListDTO = _mapper.Map<List<Song>, List<SongDTO>>(songList);
+            var genreList = await _genreRepo.GetAll();
+            var artistList = await _artistRepo.GetAll();
+            
+            foreach (var song in songListDTO)
+            {
+                song.Genre = genreList.FirstOrDefault(g => g.Id == song.GenreId);
+                song.Artist = artistList.FirstOrDefault(a => a.Id == song.ArtistId);
+            }
+            switch (sortOrder)
+            {
+                case "Title":
+                    songListDTO = songListDTO.OrderBy(s => s.Title).ToList();
+                    break;
+                case "title_desc":
+                    songListDTO = songListDTO.OrderByDescending(s => s.Title).ToList();
+                    break;
+                case "Date":
+                    songListDTO = songListDTO.OrderBy(s => s.ReleaseDate).ToList();
+                    break;
+                case "date_desc":
+                    songListDTO = songListDTO.OrderByDescending(s => s.ReleaseDate).ToList();
+                    break;
+                case "Genre":
+                    songListDTO = songListDTO.OrderBy(s => s.Genre.Name).ToList();
+                    break;
+                case "genre_desc":
+                    songListDTO = songListDTO.OrderByDescending(s => s.Genre.Name).ToList();
+                    break;
+                case "Artist":
+                    songListDTO = songListDTO.OrderBy(s => s.Artist.Name).ToList();
+                    break;
+                case "artist_desc":
+                    songListDTO = songListDTO.OrderByDescending(s => s.Artist.Name).ToList();
+                    break;
+                default:
+                    songListDTO = songListDTO.OrderBy(s => s.Title).ToList();
+                    break;
+            }
+            return View("Index",songListDTO);
+        }
+
         // GET: Songs/Details/5
         public async Task<IActionResult> Details(int? id)
         {
