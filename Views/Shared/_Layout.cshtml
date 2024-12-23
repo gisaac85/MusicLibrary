@@ -3,8 +3,13 @@
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>@ViewData["Title"] - MusicLibrary</title>
+	<title>@ViewData["Title"] - Build you music !</title>
+	<link rel="icon" href="/images/logo.ico" type="image/x-icon">
 	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-grid.css" />
+	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-reboot.css" />
+	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-utilities.css" />
 	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 	<link rel="stylesheet" href="~/MusicLibrary.styles.css" asp-append-version="true" />
 </head>
@@ -20,13 +25,25 @@
 						aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				</button>
-				<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+				<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between" style="margin-top:-10px;">
 					<ul class="navbar-nav flex-grow-1">
-						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Artists" asp-action="Index">Artists</a>
+						<li class="nav-item dropdown dropdown-header">
+							<button class="btn btn-group shadow-none" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<a class="nav-link text-dark" asp-area="" asp-controller="Artists" asp-action="Index">Artists</a>
+							</button>
+							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+								<a class="dropdown-item" href="#">Add a new artist</a>
+								<a class="dropdown-item" href="#">Delete an artist</a>
+							</div>
 						</li>
-						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Genres" asp-action="Index">Genres</a>
+						<li class="nav-item dropdown dropdown-header">
+							<button class="btn btn-group shadow-none" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<a class="nav-link text-dark" asp-area="" asp-controller="Genres" asp-action="Index">Genres</a>
+							</button>
+							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+								<a class="dropdown-item" href="#">Add a new genre</a>
+								<a class="dropdown-item" href="#">Delete a genre</a>
+							</div>
 						</li>
 					</ul>
 				</div>
@@ -47,7 +64,7 @@
 					</div>
 				</div>
 			</div>
-		</nav>		
+		</nav>
 	</header>
 	<div class="container">
 		<main role="main" class="pb-3">
@@ -60,6 +77,7 @@
 			&copy; 2024 - MusicLibrary - <a asp-area="" asp-controller="Songs" asp-action="Index">Songs</a>
 		</div>
 	</footer>
+	<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>
 	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="~/js/site.js" asp-append-version="true"></script>

@@ -1,20 +1,27 @@
 ﻿@model List<MusicLibrary.Data.DTO.SongDTO>
 
 @{
-	ViewData["Title"] = "Index";
+	ViewData["Title"] = "Music World";
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<style>
+	.btn {
+		width: 50px !important;
+		height: 30px !important;
+		padding: 0 !important;
+		border: none !important;
+	}
 
-@* <form asp-action="Search" method="get">
-	<div class="form-actions no-color">
-		<p>
-			<label>Find by name: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" /></label>
-			<input type="submit" value="Search" class="btn btn-default" /> |
-			<a asp-action="Index">Back to Full List</a>
-		</p>
-	</div>
-</form> *@
+	.dropdown-menu {
+		min-width: inherit;
+	}
+	.dropdown-item {
+		padding: 0px 10px !important;
+		font-size: 14px !important;
+
+	}
+</style>
 
 <p>
 	<a asp-action="Create">Create New</a>
