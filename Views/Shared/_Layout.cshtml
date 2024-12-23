@@ -5,6 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>@ViewData["Title"] - Build you music !</title>
 	<link rel="icon" href="/images/logo.ico" type="image/x-icon">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
 	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-grid.css" />
@@ -12,14 +13,40 @@
 	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-utilities.css" />
 	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 	<link rel="stylesheet" href="~/MusicLibrary.styles.css" asp-append-version="true" />
+	<style>
+		.btn {
+			width: 50px !important;
+			height: 30px !important;
+			padding: 0 !important;
+			border: none !important;
+		}
+
+		.dropdown-menu {
+			min-width: inherit;
+		}
+
+		.dropdown-item {
+			padding: 0px 10px !important;
+			font-size: 14px !important;
+		}
+
+		.nav-link {
+			color: white !important;
+		}
+		.nav-item
+		{
+			color: white !important;
+		}
+	</style>
+
 </head>
 <body>
 	<header>
-		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<nav class="navbar navbar-expand-lg navbar-dark bg-black">
 			<div class="container-fluid">
 				<a class="navbar-brand" asp-area="" asp-controller="Songs" asp-action="Index" style="margin-left:50px;">
 					<img src="/images/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
-					My Music World
+					<span style="font-size:24px;">My Music World</span>
 				</a>
 				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
 						aria-expanded="false" aria-label="Toggle navigation">
@@ -32,8 +59,7 @@
 								<a class="nav-link text-dark" asp-area="" asp-controller="Artists" asp-action="Index">Artists</a>
 							</button>
 							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-								<a class="dropdown-item" href="#">Add a new artist</a>
-								<a class="dropdown-item" href="#">Delete an artist</a>
+								<a class="dropdown-item" asp-area="" asp-controller="Artists" asp-action="Create">Add a new artist</a>
 							</div>
 						</li>
 						<li class="nav-item dropdown dropdown-header">
@@ -41,8 +67,7 @@
 								<a class="nav-link text-dark" asp-area="" asp-controller="Genres" asp-action="Index">Genres</a>
 							</button>
 							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-								<a class="dropdown-item" href="#">Add a new genre</a>
-								<a class="dropdown-item" href="#">Delete a genre</a>
+								<a class="dropdown-item" asp-area="" asp-controller="Genres" asp-action="Create">Add a new genre</a>
 							</div>
 						</li>
 					</ul>
