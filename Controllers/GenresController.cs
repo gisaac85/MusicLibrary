@@ -5,24 +5,24 @@ using MusicLibrary.Models;
 
 namespace MusicLibrary.Controllers
 {
-    public class ArtistsController : Controller
+    public class GenresController : Controller
     {
-        private readonly IArtistRepo _artistRepo;
+        private readonly IGenreRepo _genreRepo;
         private readonly IMapper _mapper;
 
-        public ArtistsController(IMapper mapper, IArtistRepo artistRepo)
+        public GenresController(IMapper mapper, IGenreRepo genreRepo)
         {
-            _mapper = mapper;           
-            _artistRepo = artistRepo;
+            _mapper = mapper;
+            _genreRepo = genreRepo;
         }
 
-        // GET: Artists
+        // GET: Genres
         public async Task<IActionResult> Index()
         {
-            return View(await _artistRepo.GetAll());
+            return View(await _genreRepo.GetAll());
         }
 
-        // GET: Artists/Details/5
+        // GET: Genres/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -30,32 +30,32 @@ namespace MusicLibrary.Controllers
                 return NotFound();
             }
 
-            var artist = await _artistRepo.Get(id);
-            if (artist == null)
+            var genre = await _genreRepo.Get(id);
+            if (genre == null)
             {
                 return NotFound();
             }
 
-            return View(artist);
+            return View(genre);
         }
 
-        // GET: Artists/Create
+        // GET: Genres/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Artists/Create
+        // POST: Genres/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Artist artist)
+        public async Task<IActionResult> Create([Bind("Id,Name")] Genre genre)
         {
             if (ModelState.IsValid)
             {
-                await _artistRepo.Create(artist);
+                await _genreRepo.Create(genre);
                 return RedirectToAction(nameof(Index));
             }
-            return View(artist);
+            return View(genre);
         }      
     }
 }

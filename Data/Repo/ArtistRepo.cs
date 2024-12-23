@@ -13,6 +13,12 @@ namespace MusicLibrary.Data.Repo
             _dbContext = dbContext;
         }
 
+        public async Task Create(Artist artist)
+        {
+            _dbContext.Add(artist);
+            await _dbContext.SaveChangesAsync();
+        }      
+
         public async Task<Artist> Get(int? id)
         {
             return await _dbContext.Artists.FindAsync(id);
