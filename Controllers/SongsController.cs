@@ -19,7 +19,7 @@ namespace MusicLibrary.Controllers
         public SongsController(IMapper mapper, ISongRepo songRepo, IGenreRepo genreRepo, IArtistRepo artistRepo)
         {
             _mapper = mapper;
-            _songRepo = songRepo;            
+            _songRepo = songRepo;
             _genreRepo = genreRepo;
             _artistRepo = artistRepo;
         }
@@ -27,9 +27,9 @@ namespace MusicLibrary.Controllers
         // GET: Songs
         public async Task<IActionResult> Index()
         {
-            var songList = await _songRepo.GetAll();           
+            var songList = await _songRepo.GetAll();
 
-            var songListDTO = _mapper.Map<List<Song>,List<SongDTO>>(songList);
+            var songListDTO = _mapper.Map<List<Song>, List<SongDTO>>(songList);
 
             var genreList = await _genreRepo.GetAll();
 
@@ -50,12 +50,12 @@ namespace MusicLibrary.Controllers
             ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
             ViewData["GenreSortParm"] = sortOrder == "Genre" ? "genre_desc" : "Genre";
             ViewData["ArtistSortParm"] = sortOrder == "Artist" ? "artist_desc" : "Artist";
-            
+
             var songList = await _songRepo.GetAll();
             var songListDTO = _mapper.Map<List<Song>, List<SongDTO>>(songList);
             var genreList = await _genreRepo.GetAll();
             var artistList = await _artistRepo.GetAll();
-            
+
             foreach (var song in songListDTO)
             {
                 song.Genre = genreList.FirstOrDefault(g => g.Id == song.GenreId);
@@ -91,11 +91,11 @@ namespace MusicLibrary.Controllers
                     songListDTO = songListDTO.OrderBy(s => s.Title).ToList();
                     break;
             }
-            return View("Index",songListDTO);
+            return View("Index", songListDTO);
         }
 
         public async Task<IActionResult> Search(string searchString)
-        {                 
+        {
             ViewData["CurrentFilter"] = searchString;
 
             var artists = from s in await _artistRepo.GetAll() select s;
@@ -118,7 +118,7 @@ namespace MusicLibrary.Controllers
 
             foreach (var song in songListDTO)
             {
-                song.Genre =  await _genreRepo.Get(song.GenreId);
+                song.Genre = await _genreRepo.Get(song.GenreId);
                 song.Artist = await _artistRepo.Get(song.ArtistId);
             }
 
@@ -196,18 +196,31 @@ namespace MusicLibrary.Controllers
         // POST: Songs/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id,[FromForm] Song song)
+        public async Task<IActionResult> Edit(int id, [FromForm] Song song)
         {
+            var songEditDTO = new SongEditDTO();
+
             if (id != song.Id)
             {
                 return NotFound();
-            }          
+            }
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                   _songRepo.Edit(song);
+                    await _songRepo.Edit(song);
+
+                    songEditDTO = _mapper.Map<SongEditDTO>(song);
+
+                    songEditDTO.Genre = await _genreRepo.Get(songEditDTO.GenreId);
+                    songEditDTO.Artist = await _artistRepo.Get(songEditDTO.ArtistId);
+
+                    ViewBag.Genres = await _genreRepo.GetAll();
+
+                    ViewBag.Artists = await _artistRepo.GetAll();
+
+                    ViewBag.Message = "Song updated successfully";
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -220,9 +233,10 @@ namespace MusicLibrary.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return View(songEditDTO);
             }
-            return View(song);
+
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Songs/Delete/5
@@ -241,7 +255,7 @@ namespace MusicLibrary.Controllers
 
             var SongToDeleteDTO = _mapper.Map<SongDeleteDTO>(song);
 
-            SongToDeleteDTO.Artist  = await _artistRepo.Get(SongToDeleteDTO.ArtistId);
+            SongToDeleteDTO.Artist = await _artistRepo.Get(SongToDeleteDTO.ArtistId);
             SongToDeleteDTO.Genre = await _genreRepo.Get(SongToDeleteDTO.GenreId);
 
             return View(SongToDeleteDTO);

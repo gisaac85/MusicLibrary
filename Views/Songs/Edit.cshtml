@@ -5,12 +5,24 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
+<br />
+<h3 class="text-center">Edit a song</h3>
 
-<h4>Song</h4>
-<hr />
+@{
+    if (ViewBag.Message != null)
+    {
+        <div class="alert alert-success" role="alert">
+            @ViewBag.Message.ToString()
+        </div>
+    };
+<br />
+}
+<div class="float-md-end">
+    <a asp-action="Index" title="Back to main"> <i style="font-size:24px;color:blue;" class="bi bi-arrow-return-left"></i></a>
+</div>
+
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-sm-3">	
         <form asp-action="Edit">
             <div asp-validation-summary="None" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
@@ -18,7 +30,7 @@
                 <label asp-for="Title" class="control-label"></label>
                 <input asp-for="Title" class="form-control" />
                 <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
+            </div><br />
             <div class="form-group">
                 <label class="control-label">Artist</label>
                 <select asp-for="ArtistId" class="form-control">
@@ -31,7 +43,7 @@
                     }
                 </select>
                 <span asp-validation-for="ArtistId" class="text-danger"></span>
-            </div>
+            </div><br />
             <div class="form-group">
                 <label class="control-label">Genre</label>
                 <select asp-for="GenreId" class="form-control">
@@ -44,22 +56,20 @@
                       }
                 </select>
                 <span asp-validation-for="GenreId" class="text-danger"></span> 
-            </div>
+            </div><br />
             <div class="form-group">
                 <label asp-for="ReleaseDate" class="control-label"></label>
                 <input asp-for="ReleaseDate" class="form-control" />
                 <span asp-validation-for="ReleaseDate" class="text-danger"></span>
-            </div>
+            </div><br />
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-md btn-success" />
             </div>
         </form>
-    </div>
+    </div>   
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
