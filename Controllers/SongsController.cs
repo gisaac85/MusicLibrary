@@ -120,7 +120,7 @@ namespace MusicLibrary.Controllers
                 song.Artist = await _artistRepo.Get(song.ArtistId);
             }
 
-            return View("Index", songListDTO);
+            return View("Index",songListDTO);
         }
 
         // GET: Songs/Details/5
