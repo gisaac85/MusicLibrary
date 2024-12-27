@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@floating-ui/dom": "^1.6.12"
+  },
+  "devDependencies": {
+    "eslint": "^9.17.0"
+  }
+}

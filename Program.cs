@@ -18,7 +18,7 @@ builder.Services.AddDbContext<MusicLibraryDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
 // inject repos
 builder.Services.AddScoped<ISongRepo, SongRepo>();

@@ -7,7 +7,7 @@ namespace MusicLibrary.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Please enter a title")]
-        public string? Title { get; set; }
+        public string Title { get; set; }
 
         [Required(ErrorMessage = "Please enter a release date")]
         public DateOnly ReleaseDate { get; set; }

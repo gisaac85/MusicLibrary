@@ -40,22 +40,22 @@ namespace MusicLibrary.Controllers
         }
 
         // GET: Artists/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            ViewBag.Artists = await _artistRepo.GetAll();
             return View();
         }
 
         // POST: Artists/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Artist artist)
+        public async Task<IActionResult> Create([FromForm] Artist artist)
         {
             if (ModelState.IsValid)
             {
-                await _artistRepo.Create(artist);
-                return RedirectToAction(nameof(Index));
+                await _artistRepo.Create(artist);               
             }
-            return View(artist);
+            return RedirectToAction(nameof(Index), "Songs");
         }      
     }
 }
