@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using MusicLibrary.Data.DTO;
 using MusicLibrary.Data.RepoInterface;
 using MusicLibrary.Models;
-using System.Collections.Immutable;
 
 namespace MusicLibrary.Controllers
 {
@@ -164,9 +162,20 @@ namespace MusicLibrary.Controllers
             if (ModelState.IsValid)
             {
                 await _songRepo.Create(song);
-                return RedirectToAction(nameof(Index));
+
+                SongCreateDTO songCreateDTO = _mapper.Map<SongCreateDTO>(song);
+
+                songCreateDTO.Genre = await _genreRepo.Get(songCreateDTO.GenreId);
+                songCreateDTO.Artist = await _artistRepo.Get(songCreateDTO.ArtistId);
+
+                ViewBag.Genres = await _genreRepo.GetAll();
+                ViewBag.Artists = await _artistRepo.GetAll();
+
+                ViewBag.Message = "Song created successfully";
+
+                return View(songCreateDTO);               
             }
-            return View(song);
+            return RedirectToAction(nameof(Create));
         }
 
         // GET: Songs/Edit/5
@@ -187,7 +196,6 @@ namespace MusicLibrary.Controllers
             }
 
             ViewBag.Genres = await _genreRepo.GetAll();
-
             ViewBag.Artists = await _artistRepo.GetAll();
 
             return View(songEditDTO);
@@ -217,7 +225,6 @@ namespace MusicLibrary.Controllers
                     songEditDTO.Artist = await _artistRepo.Get(songEditDTO.ArtistId);
 
                     ViewBag.Genres = await _genreRepo.GetAll();
-
                     ViewBag.Artists = await _artistRepo.GetAll();
 
                     ViewBag.Message = "Song updated successfully";

@@ -1,14 +1,25 @@
-﻿@model MusicLibrary.Models.Song
+﻿@model MusicLibrary.Data.DTO.SongCreateDTO
 
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
+<br />
+<h3 class="text-center">Create a new song</h3>
+@{
+    if (ViewBag.Message != null)
+    {
+        <div class="alert alert-success" role="alert">
+            @ViewBag.Message.ToString()
+        </div>
+    };
+    <br />
+}
 
-<h4>Song</h4>
-<hr />
+<div class="float-md-end">
+    <a asp-action="Index" title="Back to main"> <i style="font-size:24px;color:blue;" class="bi bi-arrow-return-left"></i></a>
+</div>
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
@@ -56,10 +67,10 @@
     </div>
 </div>
 
-<div>
+@* <div>
     <a asp-action="Index">Back to List</a>
 </div>
-
+ *@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
