@@ -7,7 +7,6 @@
 <br />
 <h3 class="text-center">Add a new artist</h3>
 
-
 <div class="row">
 	<div class="col-md-2">
 		<form asp-action="Create">
@@ -20,7 +19,7 @@
 			<br />
 			<div class="justify-content-between">
 				<div>
-					<input type="submit" value="Create" class="btn btn-md btn-success" />					
+					<input type="submit" value="Add" class="btn btn-md btn-success" />					
 				</div>
 				<br />
 				<div>
@@ -35,7 +34,14 @@
 			@{
 				foreach (var artist in (List<Artist>)ViewBag.Artists)
 				{
-					<li>@artist.Name</li>
+					<li>
+						@artist.Name &nbsp; <a asp-action="Delete" asp-controller="Artists" asp-route-id="@artist.Id" class="text-decoration-none" data-toggle="tooltip" title="Remove an artist">
+							<i style="color:red;" class="bi bi-trash"></i>
+						</a>
+					</li>
+
+						
+
 				}
 			}
 		</ol>

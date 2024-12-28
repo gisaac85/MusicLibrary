@@ -53,9 +53,10 @@ namespace MusicLibrary.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _artistRepo.Create(artist);               
+                await _artistRepo.Create(artist);
+                ViewBag.Message = "Song added successfully";
             }
-            return RedirectToAction(nameof(Index), "Songs");
+            return RedirectToAction(nameof(Index), "Songs",ViewBag.Message);
         }      
     }
 }

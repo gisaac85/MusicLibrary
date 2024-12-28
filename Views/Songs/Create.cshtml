@@ -6,20 +6,8 @@
 }
 
 <br />
-<h3 class="text-center">Create a new song</h3>
-@{
-    if (ViewBag.Message != null)
-    {
-        <div class="alert alert-success" role="alert">
-            @ViewBag.Message.ToString()
-        </div>
-    };
-    <br />
-}
+<h3 class="text-center">Add a new song</h3>
 
-<div class="float-md-end">
-    <a asp-action="Index" title="Back to main"> <i style="font-size:24px;color:blue;" class="bi bi-arrow-return-left"></i></a>
-</div>
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
@@ -28,7 +16,7 @@
                 <label asp-for="Title" class="control-label"></label>
                 <input asp-for="Title" class="form-control" />
                 <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
+            </div><br />
             <div class="form-group">
                 <label class="control-label">Artist</label>
                 <select asp-for="ArtistId" class="form-control">
@@ -41,7 +29,7 @@
                     }
                 </select>
                 <span asp-validation-for="ArtistId" class="text-danger"></span>
-            </div>
+            </div><br />
             <div class="form-group">
                 <label class="control-label">Genre</label>
                 <select asp-for="GenreId" class="form-control">
@@ -54,23 +42,27 @@
                     }
                 </select>
                 <span asp-validation-for="GenreId" class="text-danger"></span>
-            </div>
+            </div><br />
             <div class="form-group">
                 <label asp-for="ReleaseDate" class="control-label"></label>
                 <input asp-for="ReleaseDate" class="form-control" />
                 <span asp-validation-for="ReleaseDate" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <br />
+            <div class="justify-content-between">
+                <div>
+                    <input type="submit" value="Add" class="btn btn-md btn-success" />
+                </div>
+                <br />
+                <div>
+                    <a asp-action="Index" asp-controller="Songs" title="Back to main"> <i style="font-size:24px;color:blue;" class="bi bi-arrow-return-left"></i></a>
+                </div>
             </div>
         </form>
     </div>
 </div>
 
-@* <div>
-    <a asp-action="Index">Back to List</a>
-</div>
- *@
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

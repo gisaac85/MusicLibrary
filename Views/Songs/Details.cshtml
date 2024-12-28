@@ -1,43 +1,45 @@
 ﻿@model MusicLibrary.Data.DTO.SongDTO
 
 @{
-    ViewData["Title"] = "Details";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewData["Title"] = "Details";
+	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
-
 <div>
-    <h4>Song</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayName("Artist")
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Artist.Name)
-        </dd>        
-        <dt class = "col-sm-2">
-            @Html.DisplayName("Genre")
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Genre.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ReleaseDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ReleaseDate)
-        </dd>
-    </dl>
+	<br />
+	<h3 class="text-center">Song details</h3>
+
+	<dl class="row">
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Title)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Title)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayName("Artist")
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Artist.Name)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayName("Genre")
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Genre.Name)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.ReleaseDate)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.ReleaseDate)
+		</dd>
+	</dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+	<a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Edit song</a>
+	<br /><br />
+	<div>
+		<a asp-action="Index" asp-controller="Songs" title="Back to main"> <i style="font-size:24px;color:blue;" class="bi bi-arrow-return-left"></i></a>
+	</div>
 </div>

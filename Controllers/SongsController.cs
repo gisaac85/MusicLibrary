@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using MusicLibrary.Data.DTO;
 using MusicLibrary.Data.RepoInterface;
 using MusicLibrary.Models;
+using System.ComponentModel;
 
 namespace MusicLibrary.Controllers
 {
@@ -20,6 +21,24 @@ namespace MusicLibrary.Controllers
             _songRepo = songRepo;
             _genreRepo = genreRepo;
             _artistRepo = artistRepo;
+        }
+
+        private async Task<List<SongDTO>> GetAll()
+        {
+            var songs = await _songRepo.GetAll();
+
+            var songsDTO = _mapper.Map<List<Song>, List<SongDTO>>(songs);
+
+            var genreList = await _genreRepo.GetAll();
+
+            var artistList = await _artistRepo.GetAll();
+
+            foreach (var s in songsDTO)
+            {
+                s.Genre = genreList.FirstOrDefault(g => g.Id == s.GenreId);
+                s.Artist = artistList.FirstOrDefault(a => a.Id == s.ArtistId);
+            }
+            return songsDTO;
         }
 
         // GET: Songs
@@ -159,6 +178,8 @@ namespace MusicLibrary.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([FromForm] Song song)
         {
+            var songsDTO = new List<SongDTO>();
+
             if (ModelState.IsValid)
             {
                 await _songRepo.Create(song);
@@ -171,11 +192,11 @@ namespace MusicLibrary.Controllers
                 ViewBag.Genres = await _genreRepo.GetAll();
                 ViewBag.Artists = await _artistRepo.GetAll();
 
-                ViewBag.Message = "Song created successfully";
+                ViewBag.Message = "Song added successfully";
 
-                return View(songCreateDTO);               
+                songsDTO = await GetAll();
             }
-            return RedirectToAction(nameof(Create));
+            return View(nameof(Index),songsDTO);
         }
 
         // GET: Songs/Edit/5
@@ -207,6 +228,7 @@ namespace MusicLibrary.Controllers
         public async Task<IActionResult> Edit(int id, [FromForm] Song song)
         {
             var songEditDTO = new SongEditDTO();
+            var songsDTO = new List<SongDTO>();
 
             if (id != song.Id)
             {
@@ -228,6 +250,8 @@ namespace MusicLibrary.Controllers
                     ViewBag.Artists = await _artistRepo.GetAll();
 
                     ViewBag.Message = "Song updated successfully";
+
+                   songsDTO = await GetAll();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -240,10 +264,8 @@ namespace MusicLibrary.Controllers
                         throw;
                     }
                 }
-                return View(songEditDTO);
             }
-
-            return RedirectToAction(nameof(Index));
+            return View(nameof(Index), songsDTO);
         }
 
         // GET: Songs/Delete/5
@@ -275,7 +297,13 @@ namespace MusicLibrary.Controllers
         {
             var song = await _songRepo.Get(id);
             await _songRepo.Delete(song);
-            return RedirectToAction(nameof(Index));
+
+            ViewBag.Message = "Song removed successfully";
+
+            var songsDTO = new List<SongDTO>();
+            songsDTO = await GetAll();
+
+            return View(nameof(Index),songsDTO);
         }
     }
 }
