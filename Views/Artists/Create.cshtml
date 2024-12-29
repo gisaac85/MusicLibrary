@@ -6,6 +6,15 @@
 }
 <br />
 <h3 class="text-center">Add a new artist</h3>
+@{
+	if (ViewBag.Message != null)
+	{
+		<div id="success-alert" class="alert alert-info" role="alert">
+			@ViewBag.Message.ToString()
+		</div>
+	};
+	<br />
+}
 
 <div class="row">
 	<div class="col-md-2">
@@ -19,7 +28,7 @@
 			<br />
 			<div class="justify-content-between">
 				<div>
-					<input type="submit" value="Add" class="btn btn-md btn-success" />					
+					<input type="submit" value="Add" class="btn btn-md btn-success" />
 				</div>
 				<br />
 				<div>
@@ -29,22 +38,32 @@
 		</form>
 	</div>
 	<div style="float:right;margin-left:900px;margin-top:-100px;">
-		<p>Added artists</p>
-		<ol>
-			@{
-				foreach (var artist in (List<Artist>)ViewBag.Artists)
-				{
-					<li>
-						@artist.Name &nbsp; <a asp-action="Delete" asp-controller="Artists" asp-route-id="@artist.Id" class="text-decoration-none" data-toggle="tooltip" title="Remove an artist">
-							<i style="color:red;" class="bi bi-trash"></i>
-						</a>
-					</li>
-
-						
-
+		<h5>Added artists</h5>
+		<table class="table-borderless text-center">
+			<thead>
+				<tr>
+					
+				</tr>
+			</thead>
+			<tbody>
+				@{
+					foreach (var artist in (List<Artist>)ViewBag.Artists)
+					{
+						<tr>
+							<td>
+								@artist.Name &nbsp;
+							</td>
+							<td>
+								<form asp-action="Delete" asp-controller="Artists">
+									<input type="hidden" value=@artist.Id name="id" />
+									<input type="submit" value="Delete" class="btn btn-danger" />			
+								</form>
+							</td>
+						</tr>
+					}
 				}
-			}
-		</ol>
+			</tbody>
+		</table>
 	</div>
 </div>
 
@@ -53,3 +72,15 @@
 		await Html.RenderPartialAsync("_ValidationScriptsPartial");
 	}
 }
+<script>
+	function hideAlert() {
+				const alertElement = document.getElementById('success-alert');
+				if (alertElement) {
+					setTimeout(() => {
+						alertElement.style.display = 'none';
+					}, 2000); // 5000 milliseconds = 5 seconds
+				}
+			}
+			// Call the function to hide the alert
+			hideAlert();
+</script>

@@ -12,8 +12,8 @@ using MusicLibrary.Data;
 namespace MusicLibrary.Migrations
 {
     [DbContext(typeof(MusicLibraryDbContext))]
-    [Migration("20241222191549_addArtist")]
-    partial class addArtist
+    [Migration("20241229182714_init-1")]
+    partial class init1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -119,15 +119,11 @@ namespace MusicLibrary.Migrations
                     b.Property<int>("ArtistId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ArtistName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("GenreId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("ReleaseDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("ReleaseDate")
+                        .HasColumnType("date");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -135,63 +131,80 @@ namespace MusicLibrary.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ArtistId");
+
+                    b.HasIndex("GenreId");
+
                     b.ToTable("Songs");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            ArtistId = 0,
-                            ArtistName = "Queen",
+                            ArtistId = 1,
                             GenreId = 1,
-                            ReleaseDate = new DateTime(1975, 10, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ReleaseDate = new DateOnly(1975, 10, 31),
                             Title = "Bohemian Rhapsody"
                         },
                         new
                         {
                             Id = 2,
-                            ArtistId = 0,
-                            ArtistName = "Led Zeppelin",
+                            ArtistId = 2,
                             GenreId = 1,
-                            ReleaseDate = new DateTime(1971, 11, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ReleaseDate = new DateOnly(1971, 11, 8),
                             Title = "Stairway to Heaven"
                         },
                         new
                         {
                             Id = 3,
-                            ArtistId = 0,
-                            ArtistName = "Eagles",
+                            ArtistId = 1,
                             GenreId = 1,
-                            ReleaseDate = new DateTime(1977, 12, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ReleaseDate = new DateOnly(1977, 12, 8),
                             Title = "Hotel California"
                         },
                         new
                         {
                             Id = 4,
-                            ArtistId = 0,
-                            ArtistName = "John Lennon",
+                            ArtistId = 4,
                             GenreId = 1,
-                            ReleaseDate = new DateTime(1971, 10, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ReleaseDate = new DateOnly(1971, 10, 11),
                             Title = "Imagine"
                         },
                         new
                         {
                             Id = 5,
-                            ArtistId = 0,
-                            ArtistName = "Nirvana",
+                            ArtistId = 6,
                             GenreId = 2,
-                            ReleaseDate = new DateTime(1991, 9, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ReleaseDate = new DateOnly(1991, 9, 10),
                             Title = "Smells Like Teen Spirit"
                         },
                         new
                         {
                             Id = 6,
-                            ArtistId = 0,
-                            ArtistName = "Metallica",
+                            ArtistId = 3,
                             GenreId = 3,
-                            ReleaseDate = new DateTime(1989, 8, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ReleaseDate = new DateOnly(1989, 8, 25),
                             Title = "One"
                         });
+                });
+
+            modelBuilder.Entity("MusicLibrary.Models.Song", b =>
+                {
+                    b.HasOne("MusicLibrary.Models.Artist", "Artist")
+                        .WithMany()
+                        .HasForeignKey("ArtistId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MusicLibrary.Models.Genre", "Genre")
+                        .WithMany()
+                        .HasForeignKey("GenreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Artist");
+
+                    b.Navigation("Genre");
                 });
 #pragma warning restore 612, 618
         }

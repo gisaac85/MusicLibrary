@@ -12,8 +12,8 @@ using MusicLibrary.Data;
 namespace MusicLibrary.Migrations
 {
     [DbContext(typeof(MusicLibraryDbContext))]
-    [Migration("20241223112521_redofixname")]
-    partial class redofixname
+    [Migration("20241229182527_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

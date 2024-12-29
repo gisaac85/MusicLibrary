@@ -17,7 +17,17 @@ namespace MusicLibrary.Data.Repo
         {
             _dbContext.Add(artist);
             await _dbContext.SaveChangesAsync();
-        }      
+        }
+
+        public async Task Delete(Artist artist)
+        {
+            if (artist != null)
+            {
+                _dbContext.Artists.Remove(artist);
+            }
+
+            await _dbContext.SaveChangesAsync();
+        }
 
         public async Task<Artist> Get(int? id)
         {

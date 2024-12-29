@@ -17,7 +17,17 @@ namespace MusicLibrary.Data.Repo
         {
             _dbContext.Add(genre);
             await _dbContext.SaveChangesAsync();
-        }      
+        }
+
+        public async Task Delete(Genre genre)
+        {
+            if (genre != null)
+            {
+                _dbContext.Genres.Remove(genre);
+            }
+
+            await _dbContext.SaveChangesAsync();
+        }
 
         public async Task<Genre> Get(int? id)
         {

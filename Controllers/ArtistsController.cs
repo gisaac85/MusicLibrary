@@ -12,7 +12,7 @@ namespace MusicLibrary.Controllers
 
         public ArtistsController(IMapper mapper, IArtistRepo artistRepo)
         {
-            _mapper = mapper;           
+            _mapper = mapper;
             _artistRepo = artistRepo;
         }
 
@@ -43,7 +43,7 @@ namespace MusicLibrary.Controllers
         public async Task<IActionResult> Create()
         {
             ViewBag.Artists = await _artistRepo.GetAll();
-            return View();
+            return View(nameof(Create));
         }
 
         // POST: Artists/Create
@@ -54,9 +54,26 @@ namespace MusicLibrary.Controllers
             if (ModelState.IsValid)
             {
                 await _artistRepo.Create(artist);
-                ViewBag.Message = "Song added successfully";
+                ViewBag.Message = $"Artist {artist.Name} added successfully";
+
+                ViewBag.Artists = await _artistRepo.GetAll();
             }
-            return RedirectToAction(nameof(Index), "Songs",ViewBag.Message);
-        }      
+            return View(nameof(Create));
+        }
+
+        // POST: Artists/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var artist = await _artistRepo.Get(id);
+            await _artistRepo.Delete(artist);
+
+            ViewBag.Message = $"Artist {artist.Name} removed successfully";
+
+            ViewBag.Artists = await _artistRepo.GetAll();            
+
+            return View(nameof(Create));
+        }
     }
 }

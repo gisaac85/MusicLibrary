@@ -7,5 +7,6 @@ namespace MusicLibrary.Data.RepoInterface
         public Task<List<Genre>> GetAll();
         public Task<Genre> Get(int? id);
         public Task Create(Genre genre);
+        public Task Delete(Genre genre);
     }
 }

@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using MusicLibrary.Data.DTO;
 using MusicLibrary.Data.RepoInterface;
 using MusicLibrary.Models;
-using System.ComponentModel;
 
 namespace MusicLibrary.Controllers
 {
@@ -180,14 +179,17 @@ namespace MusicLibrary.Controllers
         {
             var songsDTO = new List<SongDTO>();
 
+            song.Genre = await _genreRepo.Get(song.GenreId);
+            song.Artist = await _artistRepo.Get(song.ArtistId);
+
             if (ModelState.IsValid)
             {
                 await _songRepo.Create(song);
 
                 SongCreateDTO songCreateDTO = _mapper.Map<SongCreateDTO>(song);
 
-                songCreateDTO.Genre = await _genreRepo.Get(songCreateDTO.GenreId);
-                songCreateDTO.Artist = await _artistRepo.Get(songCreateDTO.ArtistId);
+                songCreateDTO.Genre = song.Genre;
+                songCreateDTO.Artist = song.Artist;
 
                 ViewBag.Genres = await _genreRepo.GetAll();
                 ViewBag.Artists = await _artistRepo.GetAll();

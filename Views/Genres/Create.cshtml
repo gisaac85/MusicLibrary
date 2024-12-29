@@ -7,7 +7,15 @@
 
 <br />
 <h3 class="text-center">Add a new genre</h3>
-
+@{
+	if (ViewBag.Message != null)
+	{
+		<div id="success-alert" class="alert alert-info" role="alert">
+			@ViewBag.Message.ToString()
+		</div>
+	};
+	<br />
+}
 <div class="row">
 	<div class="col-md-2">
 		<form asp-action="Create">
@@ -33,15 +41,31 @@
 		<a href="https://en.wikipedia.org/wiki/List_of_music_genres_and_styles" target="_blank">More Info over music genres</a>
 	</div>
 	<div style="float:right;margin-left:900px;margin-top:-100px;">
-		<p>Added genres</p>
-		<ol>
-			@{
-				foreach (var genre in (List<Genre>)ViewBag.Geners)
-				{
-					<li>@genre.Name</li>
+		<h5>Added genres</h5>
+		<table class="table-borderless text-center">
+			<thead>
+				<tr>
+				</tr>
+			</thead>
+			<tbody>
+				@{
+					foreach (var genre in (List<Genre>)ViewBag.Genres)
+					{
+						<tr>
+							<td>
+								@genre.Name &nbsp;
+							</td>
+							<td>
+								<form asp-action="Delete" asp-controller="Genres">
+									<input type="hidden" value=@genre.Id name="id" />
+									<input type="submit" value="Delete" class="btn btn-danger" />
+								</form>
+							</td>
+						</tr>
+					}
 				}
-			}
-		</ol>
+			</tbody>
+		</table>
 	</div>
 </div>
 
@@ -50,3 +74,15 @@
 		await Html.RenderPartialAsync("_ValidationScriptsPartial");
 	}
 }
+<script>
+	function hideAlert() {
+				const alertElement = document.getElementById('success-alert');
+				if (alertElement) {
+					setTimeout(() => {
+						alertElement.style.display = 'none';
+					}, 2000); // 5000 milliseconds = 5 seconds
+				}
+			}
+			// Call the function to hide the alert
+			hideAlert();
+</script>

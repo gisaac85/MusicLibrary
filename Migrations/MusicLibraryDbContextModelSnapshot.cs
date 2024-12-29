@@ -128,6 +128,10 @@ namespace MusicLibrary.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ArtistId");
+
+                    b.HasIndex("GenreId");
+
                     b.ToTable("Songs");
 
                     b.HasData(
@@ -179,6 +183,25 @@ namespace MusicLibrary.Migrations
                             ReleaseDate = new DateOnly(1989, 8, 25),
                             Title = "One"
                         });
+                });
+
+            modelBuilder.Entity("MusicLibrary.Models.Song", b =>
+                {
+                    b.HasOne("MusicLibrary.Models.Artist", "Artist")
+                        .WithMany()
+                        .HasForeignKey("ArtistId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MusicLibrary.Models.Genre", "Genre")
+                        .WithMany()
+                        .HasForeignKey("GenreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Artist");
+
+                    b.Navigation("Genre");
                 });
 #pragma warning restore 612, 618
         }

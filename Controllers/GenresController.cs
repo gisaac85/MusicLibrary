@@ -13,7 +13,7 @@ namespace MusicLibrary.Controllers
         public GenresController(IMapper mapper, IGenreRepo genreRepo)
         {
             _mapper = mapper;
-            _genreRepo = genreRepo;
+            _genreRepo = genreRepo; 
         }
 
         // GET: Genres
@@ -42,8 +42,8 @@ namespace MusicLibrary.Controllers
         // GET: Genres/Create
         public async Task<IActionResult> Create()
         {
-            ViewBag.Geners = await _genreRepo.GetAll();
-            return View();
+            ViewBag.Genres = await _genreRepo.GetAll();
+            return View(nameof(Create));
         }
 
         // POST: Genres/Create
@@ -53,9 +53,26 @@ namespace MusicLibrary.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _genreRepo.Create(genre);                
+                await _genreRepo.Create(genre);
+                ViewBag.Message = $"Genre {genre.Name} added successfully";
+                ViewBag.Genres = await _genreRepo.GetAll();
             }
-            return RedirectToAction(nameof(Index),"Songs");
+            return View(nameof(Create));
+        }
+
+        // POST: Artists/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var genre = await _genreRepo.Get(id);
+            await _genreRepo.Delete(genre);
+
+            ViewBag.Message = $"Genre {genre.Name} removed successfully";        
+
+            ViewBag.Genres = await _genreRepo.GetAll();
+
+            return View(nameof(Create));
         }      
     }
 }
