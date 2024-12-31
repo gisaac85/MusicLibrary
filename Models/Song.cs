@@ -14,18 +14,16 @@ namespace MusicLibrary.Models
         [Required(ErrorMessage = "Please enter a release date")]
         public DateOnly ReleaseDate { get; set; }
 
+        public byte[]? File { get; set; }
+
         [Required(ErrorMessage = "Please enter a genre")]
         public int GenreId { get; set; }
 
         [Required(ErrorMessage = "Please enter an artist")]
         public int ArtistId { get; set; }
 
-        [IgnoreDataMember]
-        [NotMapped]
         public virtual Genre? Genre { get; set; }
 
-        [IgnoreDataMember]
-        [NotMapped]
         public virtual Artist? Artist { get; set; }
     }
 }

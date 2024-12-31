@@ -68,6 +68,11 @@ namespace MusicLibrary.Migrations
                         {
                             Id = 6,
                             Name = "Metallica"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "BSB"
                         });
                 });
 
@@ -115,6 +120,9 @@ namespace MusicLibrary.Migrations
 
                     b.Property<int>("ArtistId")
                         .HasColumnType("int");
+
+                    b.Property<byte[]>("File")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<int>("GenreId")
                         .HasColumnType("int");
