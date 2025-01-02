@@ -13,6 +13,8 @@ namespace MusicLibrary.Controllers
         private readonly IGenreRepo _genreRepo;
         private readonly IArtistRepo _artistRepo;
         private readonly IMapper _mapper;
+        private string path = Path.Combine(Environment.CurrentDirectory, "Uploads");
+        private static IFormFile? _file;
 
         public SongsController(IMapper mapper, ISongRepo songRepo, IGenreRepo genreRepo, IArtistRepo artistRepo)
         {
@@ -175,15 +177,44 @@ namespace MusicLibrary.Controllers
         // POST: Songs/Create       
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([FromForm] Song song)
+        public async Task<IActionResult> Create([FromForm] Song song,IFormFile File)
         {
             var songsDTO = new List<SongDTO>();
 
             song.Genre = await _genreRepo.Get(song.GenreId);
             song.Artist = await _artistRepo.Get(song.ArtistId);
 
+            if (File == null)
+            {
+                ModelState.Remove("File");
+            }
+
             if (ModelState.IsValid)
             {
+                // file handle
+                if (File != null && File.Length > 0)
+                {
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                    }
+
+                    string fileName = Path.GetFileName(File.FileName);
+                    using (FileStream stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
+                    {
+                        await File.CopyToAsync(stream);
+                    }
+
+                    song.FileName = Path.Combine(path, File.FileName);
+
+                    ViewBag.Data = "data:audio/mp3;base64," + Convert.ToBase64String(System.IO.File.ReadAllBytes(Path.Combine(path, fileName)));
+
+                    song.File = ConvertToByteArray(Path.Combine(path, File.FileName));
+
+                    _file = File;
+                }
+                // file handled
+
                 await _songRepo.Create(song);
 
                 SongCreateDTO songCreateDTO = _mapper.Map<SongCreateDTO>(song);
@@ -201,6 +232,49 @@ namespace MusicLibrary.Controllers
             return View(nameof(Index),songsDTO);
         }
 
+        private byte[] ConvertToByteArray(string filePath)
+        {
+            byte[] fileData;
+            //Create a File Stream Object to read the data
+            using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite))
+            {
+                using (BinaryReader reader = new BinaryReader(fs))
+                {
+                    fileData = reader.ReadBytes((int)fs.Length);
+                }
+            }
+            return fileData;
+        }
+
+        public IFormFile ConvertByteArrayToIFormFile(byte[] fileBytes, string fileName)
+        {
+            var formFile = new Helpers.FormFile(fileBytes, fileName)
+            {
+                ContentType = "audio/mpeg",
+                ContentDisposition = $"form-data; name=file; filename={fileName}"
+            };
+            return formFile;
+        }
+
+
+
+        [HttpGet]
+        public async Task<ActionResult> GetAudioStream(int id)
+        {
+            if (id > 0)
+            {
+                var song = await _songRepo.Get(id);
+
+                var songFile = song.File;
+
+                if (songFile != null && songFile.Length > 0)
+                {
+                    return File(songFile, "audio/mpeg");
+                }
+            }
+            return null;
+        }
+       
         // GET: Songs/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -210,6 +284,8 @@ namespace MusicLibrary.Controllers
             }
 
             var song = await _songRepo.Get(id);
+
+            _file = ConvertByteArrayToIFormFile(song.File,song.FileName);
 
             var songEditDTO = _mapper.Map<SongEditDTO>(song);
 
@@ -237,10 +313,34 @@ namespace MusicLibrary.Controllers
                 return NotFound();
             }
 
+            if (_file == null)
+            {
+                ModelState.Remove("File");
+            }
+
             if (ModelState.IsValid)
             {
                 try
                 {
+                    // file handle
+                    if (_file != null && _file.Length > 0)
+                    {
+                        if (!Directory.Exists(path))
+                        {
+                            Directory.CreateDirectory(path);
+                        }
+
+                        //string fileName = Path.GetFileName(_file.FileName);
+                        using (FileStream stream = new FileStream(_file.FileName, FileMode.OpenOrCreate))
+                        {
+                            await _file.CopyToAsync(stream);
+                        }
+
+                        song.File = ConvertToByteArray(Path.Combine(_file.FileName));
+                        song.FileName = _file.FileName;
+                    }
+                    // file handled
+
                     await _songRepo.Edit(song);
 
                     songEditDTO = _mapper.Map<SongEditDTO>(song);

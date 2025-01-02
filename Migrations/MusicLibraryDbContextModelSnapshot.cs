@@ -68,6 +68,11 @@ namespace MusicLibrary.Migrations
                         {
                             Id = 6,
                             Name = "Metallica"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "BSB"
                         });
                 });
 
@@ -116,6 +121,12 @@ namespace MusicLibrary.Migrations
                     b.Property<int>("ArtistId")
                         .HasColumnType("int");
 
+                    b.Property<byte[]>("File")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("FileName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("GenreId")
                         .HasColumnType("int");
 
@@ -139,6 +150,7 @@ namespace MusicLibrary.Migrations
                         {
                             Id = 1,
                             ArtistId = 1,
+                            FileName = "C:\\Users\\HP\\source\\repos\\MusicLibrary\\Uploads\\Queen-BohemianRhapsody.mp3",
                             GenreId = 1,
                             ReleaseDate = new DateOnly(1975, 10, 31),
                             Title = "Bohemian Rhapsody"
@@ -147,6 +159,7 @@ namespace MusicLibrary.Migrations
                         {
                             Id = 2,
                             ArtistId = 2,
+                            FileName = "C:\\Users\\HP\\source\\repos\\MusicLibrary\\Uploads\\Led-Zeppelin-Stairway-To-Heaven.mp3",
                             GenreId = 1,
                             ReleaseDate = new DateOnly(1971, 11, 8),
                             Title = "Stairway to Heaven"
@@ -155,6 +168,7 @@ namespace MusicLibrary.Migrations
                         {
                             Id = 3,
                             ArtistId = 1,
+                            FileName = "C:\\Users\\HP\\source\\repos\\MusicLibrary\\Uploads\\Eagles-Hotel-California.mp3",
                             GenreId = 1,
                             ReleaseDate = new DateOnly(1977, 12, 8),
                             Title = "Hotel California"
@@ -163,6 +177,7 @@ namespace MusicLibrary.Migrations
                         {
                             Id = 4,
                             ArtistId = 4,
+                            FileName = "C:\\Users\\HP\\source\\repos\\MusicLibrary\\Uploads\\John-Lennon-Imagine.mp3",
                             GenreId = 1,
                             ReleaseDate = new DateOnly(1971, 10, 11),
                             Title = "Imagine"
@@ -171,6 +186,7 @@ namespace MusicLibrary.Migrations
                         {
                             Id = 5,
                             ArtistId = 6,
+                            FileName = "C:\\Users\\HP\\source\\repos\\MusicLibrary\\Uploads\\Metallica-Smells-Like-Teen-Spiri.mp3",
                             GenreId = 2,
                             ReleaseDate = new DateOnly(1991, 9, 10),
                             Title = "Smells Like Teen Spirit"
@@ -179,9 +195,19 @@ namespace MusicLibrary.Migrations
                         {
                             Id = 6,
                             ArtistId = 3,
+                            FileName = "C:\\Users\\HP\\source\\repos\\MusicLibrary\\Uploads\\Metallica-One.mp3",
                             GenreId = 3,
                             ReleaseDate = new DateOnly(1989, 8, 25),
                             Title = "One"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            ArtistId = 7,
+                            FileName = "C:\\Users\\HP\\source\\repos\\MusicLibrary\\Uploads\\Backstreet Boys - Everybody.mp3",
+                            GenreId = 2,
+                            ReleaseDate = new DateOnly(1999, 1, 10),
+                            Title = "Everybody"
                         });
                 });
 

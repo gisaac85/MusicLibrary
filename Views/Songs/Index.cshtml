@@ -25,7 +25,7 @@
 <div class="container">
 	<div class="row justify-content-center">
 		<div class="col">
-			<table class="table table-striped text-center table-hover table-responsive">
+			<table class="table table-striped text-center table-hover table-responsive text-center">
 				<thead class="bg-light sticky-top">
 					<tr>
 						<th>
@@ -40,6 +40,8 @@
 						<th>
 							<a asp-action="Sort" asp-route-sortOrder="@ViewData["GenreSortParm"]">@Html.DisplayName("Genre")</a>
 						</th>
+						<th></th>
+						<th></th>
 						<th></th>
 					</tr>
 				</thead>
@@ -59,7 +61,14 @@
 							<td>
 								@Html.DisplayFor(modelItem => item.Genre.Name)
 							</td>
-
+							<td>
+								<audio controls preload="auto" autobuffer>
+									<source src='@Url.Action("GetAudioStream","Songs", new {id = item.Id})' type="audio/mpeg" />
+								</audio>
+							</td>
+							<td>
+								<input type="hidden" dirname="FileName" id="FileName" value="@item.FileName" />
+							</td>
 							<td>
 								<a asp-action="Edit" asp-route-id="@item.Id" class="text-decoration-none" data-toggle="tooltip" title="Edit a song">
 									<i style="color:limegreen;" class="bi bi-pencil"></i>

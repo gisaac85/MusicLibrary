@@ -9,7 +9,8 @@ namespace MusicLibrary.Data.DTO
         public string Title { get; set; }
 
         public DateOnly ReleaseDate { get; set; }
-
+        public byte[]? File { get; set; }
+        public string? FileName { get; set; }
         public int GenreId { get; set; }
 
         public int ArtistId { get; set; }
