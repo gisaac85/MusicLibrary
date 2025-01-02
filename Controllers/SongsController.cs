@@ -256,8 +256,6 @@ namespace MusicLibrary.Controllers
             return formFile;
         }
 
-
-
         [HttpGet]
         public async Task<ActionResult> GetAudioStream(int id)
         {
@@ -325,17 +323,6 @@ namespace MusicLibrary.Controllers
                     // file handle
                     if (_file != null && _file.Length > 0)
                     {
-                        if (!Directory.Exists(path))
-                        {
-                            Directory.CreateDirectory(path);
-                        }
-
-                        //string fileName = Path.GetFileName(_file.FileName);
-                        using (FileStream stream = new FileStream(_file.FileName, FileMode.OpenOrCreate))
-                        {
-                            await _file.CopyToAsync(stream);
-                        }
-
                         song.File = ConvertToByteArray(Path.Combine(_file.FileName));
                         song.FileName = _file.FileName;
                     }
