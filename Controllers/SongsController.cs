@@ -4,8 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using MusicLibrary.Data.DTO;
 using MusicLibrary.Data.RepoInterface;
 using MusicLibrary.Models;
-using System.Collections;
-using System.IO;
 
 namespace MusicLibrary.Controllers
 {
@@ -16,7 +14,7 @@ namespace MusicLibrary.Controllers
         private readonly IArtistRepo _artistRepo;
         private readonly IMapper _mapper;
         private string path = Path.Combine(Environment.CurrentDirectory, "Uploads");
-        private static IFormFile _file;
+        private static IFormFile? _file;
 
         public SongsController(IMapper mapper, ISongRepo songRepo, IGenreRepo genreRepo, IArtistRepo artistRepo)
         {
@@ -207,9 +205,13 @@ namespace MusicLibrary.Controllers
                         await File.CopyToAsync(stream);
                     }
 
+                    song.FileName = Path.Combine(path, File.FileName);
+
                     ViewBag.Data = "data:audio/mp3;base64," + Convert.ToBase64String(System.IO.File.ReadAllBytes(Path.Combine(path, fileName)));
 
                     song.File = ConvertToByteArray(Path.Combine(path, File.FileName));
+
+                    _file = File;
                 }
                 // file handled
 
@@ -244,6 +246,18 @@ namespace MusicLibrary.Controllers
             return fileData;
         }
 
+        public IFormFile ConvertByteArrayToIFormFile(byte[] fileBytes, string fileName)
+        {
+            var formFile = new Helpers.FormFile(fileBytes, fileName)
+            {
+                ContentType = "audio/mpeg",
+                ContentDisposition = $"form-data; name=file; filename={fileName}"
+            };
+            return formFile;
+        }
+
+
+
         [HttpGet]
         public async Task<ActionResult> GetAudioStream(int id)
         {
@@ -260,19 +274,7 @@ namespace MusicLibrary.Controllers
             }
             return null;
         }
-
-        public IFormFile ConvertByteArrayToIFormFile(byte[] byteArray, string fileName)
-        {
-            var stream = new MemoryStream(byteArray);
-            var formFile = new FormFile(stream, 0, byteArray.Length, "name", fileName)
-            {
-                Headers = new HeaderDictionary(),
-                ContentType = "application/octet-stream",
-                ContentDisposition = "form-data",
-            };
-            return formFile;
-        }
-
+       
         // GET: Songs/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -282,6 +284,8 @@ namespace MusicLibrary.Controllers
             }
 
             var song = await _songRepo.Get(id);
+
+            _file = ConvertByteArrayToIFormFile(song.File,song.FileName);
 
             var songEditDTO = _mapper.Map<SongEditDTO>(song);
 
@@ -299,7 +303,7 @@ namespace MusicLibrary.Controllers
         // POST: Songs/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [FromForm] Song song,IFormFile File)
+        public async Task<IActionResult> Edit(int id, [FromForm] Song song)
         {
             var songEditDTO = new SongEditDTO();
             var songsDTO = new List<SongDTO>();
@@ -309,7 +313,7 @@ namespace MusicLibrary.Controllers
                 return NotFound();
             }
 
-            if (File == null)
+            if (_file == null)
             {
                 ModelState.Remove("File");
             }
@@ -319,22 +323,21 @@ namespace MusicLibrary.Controllers
                 try
                 {
                     // file handle
-                    if (File != null && File.Length > 0)
+                    if (_file != null && _file.Length > 0)
                     {
                         if (!Directory.Exists(path))
                         {
                             Directory.CreateDirectory(path);
                         }
 
-                        string fileName = Path.GetFileName(File.FileName);
-                        using (FileStream stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
+                        //string fileName = Path.GetFileName(_file.FileName);
+                        using (FileStream stream = new FileStream(_file.FileName, FileMode.OpenOrCreate))
                         {
-                            await File.CopyToAsync(stream);
+                            await _file.CopyToAsync(stream);
                         }
 
-                        ViewBag.Data = "data:audio/mp3;base64," + Convert.ToBase64String(System.IO.File.ReadAllBytes(Path.Combine(path, fileName)));
-
-                        song.File = ConvertToByteArray(Path.Combine(path, File.FileName));
+                        song.File = ConvertToByteArray(Path.Combine(_file.FileName));
+                        song.FileName = _file.FileName;
                     }
                     // file handled
 

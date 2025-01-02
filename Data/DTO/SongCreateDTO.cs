@@ -12,6 +12,7 @@ namespace MusicLibrary.Data.DTO
 
         public byte[]? File { get; set; }
 
+        public string? FileName { get; set; }
         public int GenreId { get; set; }
 
         public int ArtistId { get; set; }

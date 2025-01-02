@@ -53,20 +53,14 @@
                 <label asp-for="File" class="control-label"></label>
                 <input asp-for="File" type="file" name="File" class="form-control" />                
             </div>
-            
+            <div class="form-group">
+                <input type="hidden" dirname="FileName" id="FileName" />
+            </div>
             <br />
             <div class="justify-content-between">
                 <div>
                     <input type="submit" value="Add" class="btn btn-md btn-success" />
-                </div>
-                @*<br />
-                @if (ViewBag.Data != null)
-                {
-                    <hr />
-                    <audio controls autobuffer="autobuffer" autoplay="autoplay">
-                        <source src='@ViewBag.Data' />
-                    </audio>
-                } *@
+                </div>              
                 <br />
                 <div>
                     <a asp-action="Index" asp-controller="Songs" title="Back to main"> <i style="font-size:24px;color:blue;" class="bi bi-arrow-return-left"></i></a>

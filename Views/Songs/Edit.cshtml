@@ -50,9 +50,13 @@
                 <span asp-validation-for="ReleaseDate" class="text-danger"></span>
             </div><br />
             <div class="form-group">
-                <label asp-for="File" class="control-label"></label>
-                <input asp-for="File" type="file" name="File" class="form-control" />
-            </div><br />
+                <label asp-for="File" class="control-label" hidden></label>
+                <input asp-for="File" type="file" name="File" hidden class="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="hidden" dirname="FileName" id="FileName" value="@Model.FileName" />
+            </div>
+            <br />
             <div class="justify-content-between">
                 <div>
                     <input type="submit" value="Save" class="btn btn-md btn-success" />

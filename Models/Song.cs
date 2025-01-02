@@ -16,6 +16,8 @@ namespace MusicLibrary.Models
 
         public byte[]? File { get; set; }
 
+        public string? FileName { get; set; }
+
         [Required(ErrorMessage = "Please enter a genre")]
         public int GenreId { get; set; }
 
