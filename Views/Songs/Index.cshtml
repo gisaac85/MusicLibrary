@@ -9,7 +9,7 @@
 <div>
 	<span style="font-size:24px;">Add a new song </span>
 	<a asp-action="Create">
-		<i style="font-size:20px;color:purple" class="bi bi-cloud-plus-fill"></i>
+		<i style="font-size:26px;color:purple" class="bi bi-cloud-plus-fill"></i>
 	</a>
 </div>
 <br />
@@ -62,7 +62,7 @@
 								@Html.DisplayFor(modelItem => item.Genre.Name)
 							</td>
 							<td>
-								<audio controls preload="auto" autobuffer>
+								<audio controls preload="none">
 									<source src='@Url.Action("GetAudioStream","Songs", new {id = item.Id})' type="audio/mpeg" />
 								</audio>
 							</td>

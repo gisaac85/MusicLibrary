@@ -45,20 +45,8 @@ namespace MusicLibrary.Controllers
         // GET: Songs
         public async Task<IActionResult> Index()
         {
-            var songList = await _songRepo.GetAll();
-
-            var songListDTO = _mapper.Map<List<Song>, List<SongDTO>>(songList);
-
-            var genreList = await _genreRepo.GetAll();
-
-            var artistList = await _artistRepo.GetAll();
-
-            foreach (var song in songListDTO)
-            {
-                song.Genre = genreList.FirstOrDefault(g => g.Id == song.GenreId);
-                song.Artist = artistList.FirstOrDefault(a => a.Id == song.ArtistId);
-            }
-
+            var songListDTO = await GetAll();
+          
             return View(songListDTO);
         }
 
