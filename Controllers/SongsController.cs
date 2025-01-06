@@ -251,6 +251,8 @@ namespace MusicLibrary.Controllers
             {
                 var song = await _songRepo.Get(id);
 
+                song.File = ConvertToByteArray(song.FileName);
+
                 var songFile = song.File;
 
                 if (songFile != null && songFile.Length > 0)
