@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using MusicLibrary.Data;
 using MusicLibrary.Data.Repo;
@@ -26,12 +27,6 @@ builder.Services.AddScoped<IGenreRepo, GenreRepo>();
 builder.Services.AddScoped<IArtistRepo, ArtistRepo>();
 
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-//if (!app.Environment.IsDevelopment())
-//{
-//    app.UseExceptionHandler("/Songs/Error");
-//}
 
 app.UseStaticFiles();
 

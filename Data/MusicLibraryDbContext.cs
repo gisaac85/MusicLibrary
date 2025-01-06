@@ -5,8 +5,10 @@ namespace MusicLibrary.Data
 {
     public class MusicLibraryDbContext : DbContext
     {
-        public MusicLibraryDbContext(DbContextOptions<MusicLibraryDbContext> options) : base(options)
+        private readonly IWebHostEnvironment _env;
+        public MusicLibraryDbContext(DbContextOptions<MusicLibraryDbContext> options, IWebHostEnvironment env) : base(options)
         {
+            _env = env;
         }
         public DbSet<Song> Songs { get; set; }
         public DbSet<Genre> Genres { get; set; }
@@ -14,6 +16,9 @@ namespace MusicLibrary.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            string webRootPath = $"{_env.WebRootPath}\\Uploads";
+            var songFile = ConvertToByteArray($"{webRootPath}\\Backstreet Boys - Everybody.mp3");
+
             builder.Entity<Genre>().HasData(
                new Genre { Id = 1, Name = "Rock" },
                new Genre { Id = 2, Name = "Grunge" },
@@ -31,14 +36,30 @@ namespace MusicLibrary.Data
                 );
 
             builder.Entity<Song>().HasData(
-                new Song { Id = 1, Title = "Bohemian Rhapsody", ArtistId = 1, GenreId = 1, ReleaseDate = new System.DateOnly(1975, 10, 31) , FileName = "C:\\Users\\HP\\source\\repos\\MusicLibrary\\Uploads\\Queen-BohemianRhapsody.mp3" },
-                new Song { Id = 2, Title = "Stairway to Heaven", ArtistId = 2, GenreId = 1, ReleaseDate = new System.DateOnly(1971, 11, 8), FileName = "C:\\Users\\HP\\source\\repos\\MusicLibrary\\Uploads\\Led-Zeppelin-Stairway-To-Heaven.mp3" },
-                new Song { Id = 3, Title = "Hotel California", ArtistId = 1, GenreId = 1, ReleaseDate = new System.DateOnly(1977, 12, 8), FileName = "C:\\Users\\HP\\source\\repos\\MusicLibrary\\Uploads\\Eagles-Hotel-California.mp3" },
-                new Song { Id = 4, Title = "Imagine", ArtistId = 4, GenreId = 1, ReleaseDate = new System.DateOnly(1971, 10, 11), FileName = "C:\\Users\\HP\\source\\repos\\MusicLibrary\\Uploads\\John-Lennon-Imagine.mp3" },
-                new Song { Id = 5, Title = "Smells Like Teen Spirit", ArtistId = 6, GenreId = 2, ReleaseDate = new System.DateOnly(1991, 9, 10), FileName = "C:\\Users\\HP\\source\\repos\\MusicLibrary\\Uploads\\Metallica-Smells-Like-Teen-Spiri.mp3" },
-                new Song { Id = 6, Title = "One", ArtistId = 3, GenreId = 3, ReleaseDate = new System.DateOnly(1989, 8, 25), FileName = "C:\\Users\\HP\\source\\repos\\MusicLibrary\\Uploads\\Metallica-One.mp3" },
-                new Song { Id = 7, Title = "Everybody", ArtistId = 7, GenreId = 2, ReleaseDate = new DateOnly(1999,1,10), FileName = "C:\\Users\\HP\\source\\repos\\MusicLibrary\\Uploads\\Backstreet Boys - Everybody.mp3" }
+                //new Song { Id = 1, Title = "Bohemian Rhapsody", ArtistId = 1, GenreId = 1, ReleaseDate = new System.DateOnly(1975, 10, 31) , FileName = $"{webRootPath}\\Queen-BohemianRhapsody.mp3",File = ConvertToByteArray($"{webRootPath}\\Queen-BohemianRhapsody.mp3") },
+                //new Song { Id = 2, Title = "Stairway to Heaven", ArtistId = 2, GenreId = 1, ReleaseDate = new System.DateOnly(1971, 11, 8), FileName = $"{webRootPath}\\Led-Zeppelin-Stairway-To-Heaven.mp3", File = ConvertToByteArray($"{webRootPath}\\Led-Zeppelin-Stairway-To-Heaven.mp3") },
+                //new Song { Id = 3, Title = "Hotel California", ArtistId = 1, GenreId = 1, ReleaseDate = new System.DateOnly(1977, 12, 8), FileName = $"{webRootPath}\\Eagles-Hotel-California.mp3", File = ConvertToByteArray($"{webRootPath}\\Eagles-Hotel-California.mp3") },
+                //new Song { Id = 4, Title = "Imagine", ArtistId = 4, GenreId = 1, ReleaseDate = new System.DateOnly(1971, 10, 11), FileName = $"{webRootPath}\\John-Lennon-Imagine.mp3" },
+                //new Song { Id = 5, Title = "Smells Like Teen Spirit", ArtistId = 6, GenreId = 2, ReleaseDate = new System.DateOnly(1991, 9, 10), FileName = $"{webRootPath}\\Metallica-Smells-Like-Teen-Spiri.mp3", File = ConvertToByteArray($"{webRootPath}\\Metallica-Smells-Like-Teen-Spiri.mp3") },
+                //new Song { Id = 6, Title = "One", ArtistId = 3, GenreId = 3, ReleaseDate = new System.DateOnly(1989, 8, 25), FileName = $"{webRootPath}\\Metallica-One.mp3"},
+                new Song { Id = 7, Title = "Everybody", ArtistId = 7, GenreId = 2, ReleaseDate = new DateOnly(1999,1,10), FileName = $"{webRootPath}\\Backstreet Boys - Everybody.mp3", File = songFile }
                );          
-        }        
+        }
+
+        private byte[] ConvertToByteArray(string filePath)
+        {
+            byte[] fileData;
+            //Create a File Stream Object to read the data
+            using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite))
+            {
+                using (BinaryReader reader = new BinaryReader(fs))
+                {
+                    fileData = reader.ReadBytes((int)fs.Length);
+                    reader.Close();
+                }
+                fs.Close();
+            }
+            return fileData;
+        }
     }
 }

@@ -7,6 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\Uploads\Backstreet Boys - Everybody.mp3" />
+    <Content Remove="wwwroot\Uploads\Eagles-Hotel-California.mp3" />
+    <Content Remove="wwwroot\Uploads\John-Lennon-Imagine.mp3" />
+    <Content Remove="wwwroot\Uploads\Led-Zeppelin-Stairway-To-Heaven.mp3" />
+    <Content Remove="wwwroot\Uploads\Metallica-One.mp3" />
+    <Content Remove="wwwroot\Uploads\Metallica-Smells-Like-Teen-Spiri.mp3" />
+    <Content Remove="wwwroot\Uploads\Michael_Jackson_-_Billie_Jean.mp3" />
+    <Content Remove="wwwroot\Uploads\Queen-BohemianRhapsody.mp3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />
@@ -15,6 +26,17 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\Uploads\Backstreet Boys - Everybody.mp3" />
+    <None Include="wwwroot\Uploads\Eagles-Hotel-California.mp3" />
+    <None Include="wwwroot\Uploads\John-Lennon-Imagine.mp3" />
+    <None Include="wwwroot\Uploads\Led-Zeppelin-Stairway-To-Heaven.mp3" />
+    <None Include="wwwroot\Uploads\Metallica-One.mp3" />
+    <None Include="wwwroot\Uploads\Metallica-Smells-Like-Teen-Spiri.mp3" />
+    <None Include="wwwroot\Uploads\Michael_Jackson_-_Billie_Jean.mp3" />
+    <None Include="wwwroot\Uploads\Queen-BohemianRhapsody.mp3" />
   </ItemGroup>
 
 </Project>
